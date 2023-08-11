@@ -45,7 +45,13 @@ class TransactionList extends StatelessWidget {
                       foregroundColor: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(6),
-                        child: FittedBox(child: Text("R\$${tr?.value}")),
+                        child: FittedBox(
+                            child: Text(
+                          'R\$${tr?.value}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        )),
                       ),
                     ),
                     title: Text(

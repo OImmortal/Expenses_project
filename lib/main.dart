@@ -1,8 +1,8 @@
-import 'package:expenses_project/components/chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
+import 'components/chart.dart';
 import 'models/transaction.dart';
 
 main() => runApp(ExpensesApp());
@@ -14,25 +14,32 @@ class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      home: const MyHomePage(),
       theme: tema.copyWith(
-          colorScheme: tema.colorScheme.copyWith(
-            primary: Colors.purple[900],
-            secondary: Colors.amber,
+        colorScheme: tema.colorScheme.copyWith(
+          primary: Colors.purple[900],
+          secondary: Colors.amber,
+        ),
+        textTheme: tema.textTheme.copyWith(
+          headline6: const TextStyle(
+            fontFamily: 'Quicksand',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          textTheme: tema.textTheme.copyWith(
-            headline6: const TextStyle(
-              fontFamily: 'Quicksand',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+          button: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          appBarTheme: tema.appBarTheme.copyWith(
-              titleTextStyle: const TextStyle(
-                  fontFamily: "Quicksand",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold))),
+        ),
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -49,7 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
-      return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+      return tr.date.isAfter(DateTime.now().subtract(
+        const Duration(days: 7),
+      ));
     }).toList();
   }
 
@@ -64,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
+
     Navigator.of(context).pop();
   }
 

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
 
-  TransactionForm(this.onSubmit);
+  const TransactionForm(this.onSubmit, {Key? key}) : super(key: key);
 
   @override
   State<TransactionForm> createState() => _TransactionFormState();
@@ -13,7 +13,7 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  DateTime? _selectedDate = DateTime.now();
 
   _submitForm() {
     final title = titleController.text;
@@ -23,7 +23,7 @@ class _TransactionFormState extends State<TransactionForm> {
       return;
     }
 
-    widget.onSubmit(title, value, _selectedDate);
+    widget.onSubmit(title, value, _selectedDate!);
   }
 
   _showDatePicker() {
@@ -53,35 +53,39 @@ class _TransactionFormState extends State<TransactionForm> {
           children: [
             TextField(
               controller: titleController,
+              onSubmitted: (_) => _submitForm(),
               decoration: const InputDecoration(
                 labelText: 'Título',
               ),
             ),
             TextField(
               controller: valueController,
-              onSubmitted: (value) => _submitForm(),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (_) => _submitForm(),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 labelText: 'Valor R\$',
               ),
             ),
-            Container(
+            SizedBox(
               height: 70,
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
                       _selectedDate == null
-                          ? "Nenhma data selecionada"
-                          : "Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}",
+                          ? 'Nenhuma data selecionada!'
+                          : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate!)}',
                     ),
                   ),
                   TextButton(
-                    onPressed: _showDatePicker,
-                    child: Text(
-                      "Selecionar Data",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: const Text(
+                      'Selecionar Data',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    onPressed: _showDatePicker,
                   )
                 ],
               ),
@@ -90,16 +94,16 @@ class _TransactionFormState extends State<TransactionForm> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
+                  child: const Text(
+                    'Nova Transação',
+                  ),
                   onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                   ),
-                  child: const Text(
-                    "Nova Transação",
-                  ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
