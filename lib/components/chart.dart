@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Chart extends StatelessWidget {
-  
-  final  List<Transaction> recentTransaction;
+  final List<Transaction> recentTransaction;
 
   Chart(this.recentTransaction, {super.key});
 
@@ -17,20 +16,17 @@ class Chart extends StatelessWidget {
 
       double totalSum = 0;
 
-      for(var i = 0;i < recentTransaction.length;i++) {
+      for (var i = 0; i < recentTransaction.length; i++) {
         bool sameDay = recentTransaction[i].date.day == weekDay.day;
         bool sameMonth = recentTransaction[i].date.month == weekDay.month;
         bool sameYear = recentTransaction[i].date.year == weekDay.year;
 
-        if(sameDay && sameMonth && sameYear) {
+        if (sameDay && sameMonth && sameYear) {
           totalSum += recentTransaction[i].value;
         }
       }
 
-      return {
-        'day': DateFormat.E().format(weekDay), 
-        'value': totalSum
-      };
+      return {'day': DateFormat.E().format(weekDay), 'value': totalSum};
     }).reversed.toList();
   }
 
@@ -53,13 +49,14 @@ class Chart extends StatelessWidget {
             return Flexible(
               fit: FlexFit.tight,
               child: ChartBar(
-                label: tr['day'].toString(), 
-                value: tr['value'] as double, 
-                percentage: (tr['value'] as double) / _weekTotalValue > 0 ? (tr['value'] as double) / _weekTotalValue : 0.0  ,
+                label: tr['day'].toString(),
+                value: tr['value'] as double,
+                percentage: (tr['value'] as double) / _weekTotalValue > 0
+                    ? (tr['value'] as double) / _weekTotalValue
+                    : 0.0,
               ),
             );
           }).toList(),
-      
         ),
       ),
     );

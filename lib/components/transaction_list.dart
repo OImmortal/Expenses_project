@@ -1,5 +1,6 @@
 import 'package:expenses_project/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
@@ -10,35 +11,36 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      child: transactions!.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  "Nenhuma transação cadastrada",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 300,
-                  child: Image.asset(
-                    "assets/images/waiting.png",
-                    fit: BoxFit.cover,
+    return transactions!.isEmpty
+        ? LayoutBuilder(
+            builder: (ctx, constraints) {
+              return Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    "Nenhuma transação cadastrada",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                ),
-              ],
-            )
-          : ListView.builder(
-              itemCount: transactions?.length,
-              itemBuilder: (ctx, index) {
-                final tr = transactions?[index];
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(15),
-                  child: ListTile(
+                  const SizedBox(height: 40),
+                  Container(
+                    height: constraints.maxHeight * 0.5,
+                    child: Image.asset(
+                      "assets/images/waiting.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        : ListView.builder(
+            itemCount: transactions?.length,
+            itemBuilder: (ctx, index) {
+              final tr = transactions?[index];
+              return Card(
+                elevation: 5,
+                margin: EdgeInsets.all(15),
+                child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
                       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -59,17 +61,22 @@ class TransactionList extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     subtitle: Text(DateFormat('d MMM y').format(tr.date)),
-                    trailing: ElevatedButton(
-                      onPressed: () => onRemove(tr.id),
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll((Colors.red)),
-                      ),
-                      child: const Icon(Icons.delete),
-                    ),
-                  ),
-                );
-              },
-            ),
-    );
+                    trailing: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? IconButton(
+                            onPressed: () => onRemove(tr.id),
+                            icon: Icon(Icons.delete),
+                          )
+                        : ElevatedButton(
+                            onPressed: () => onRemove(tr.id),
+                            style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll((Colors.red)),
+                            ),
+                            child: const Icon(Icons.delete),
+                          )),
+              );
+            },
+          );
   }
 }
